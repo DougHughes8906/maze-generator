@@ -7,7 +7,9 @@ bool gridsEqual(const char_grid_t &grid_a, const char_grid_t &grid_b) {
 }
 
 void testTrue(bool test_value, const std::string &error_message) {
-
+	if (!test_value) {
+		std::cout << error_message << "\n";
+	}
 }
 
 void testRenderMaze() {
