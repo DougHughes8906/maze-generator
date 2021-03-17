@@ -1,9 +1,34 @@
 #include <string>
+#include <vector>
 #include <iostream>
 #include "renderMaze.h"
 
-bool gridsEqual(const char_grid_t &grid_a, const char_grid_t &grid_b) {
-	return false;
+/*
+	Tests that two 2D vectors have the same number of rows, the 
+	same number of columns in each row, and the same value in
+	every cell.
+*/
+template <typename T>
+bool gridsEqual(const std::vector<std::vector<T>> &grid_a, 
+		const std::vector<std::vector<T>> &grid_b) {
+	if (grid_a.size() != grid_b.size()) {
+		return false;
+	}
+
+	int num_rows{ static_cast<int>(grid_a.size()) };
+	for (int i{ 0 }; i < num_rows; ++i) {
+		if (grid_a[i].size() != grid_b[i].size()) {
+			return false;
+		}
+
+		int num_cols{ static_cast<int>(grid_a[i].size()) };
+		for (int j{ 0 }; j < num_cols; ++j) {
+			if (grid_a[i][j] != grid_b[i][j]) {
+				return false;
+			}
+		}
+	}	
+	return true;
 }
 
 void testTrue(bool test_value, const std::string &error_message) {
@@ -12,6 +37,7 @@ void testTrue(bool test_value, const std::string &error_message) {
 	}
 }
 
+// tests the renderMaze function
 void testRenderMaze() {
 	const bool_grid_t test_grid{
 		{ true, true, false, true },
