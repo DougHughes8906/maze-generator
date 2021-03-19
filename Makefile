@@ -1,13 +1,15 @@
-OBJECTS = renderMaze.o tests.o
+CXX 		= g++
+CXXFLAGS 	= -std=c++0x -Wall 
+OBJECTS 	= renderMaze.o tests.o
 
 tests : $(OBJECTS)
-	g++ -std=c++0x -o tests $(OBJECTS)
+	$(CXX) $(CXXFLAGS) -o tests $(OBJECTS)
 
 renderMaze.o : renderMaze.cpp renderMaze.h
-	g++ -std=c++0x -c renderMaze.cpp
+	$(CXX) $(CXXFLAGS) -c renderMaze.cpp
 
 tests.o : tests.cpp renderMaze.h
-	g++ -std=c++0x -c tests.cpp
+	$(CXX) $(CXXFLAGS) -c tests.cpp
 
 clean :
 	rm tests $(OBJECTS)
