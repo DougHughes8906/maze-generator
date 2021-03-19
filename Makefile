@@ -10,4 +10,4 @@ tests.o : tests.cpp renderMaze.h
 	g++ -std=c++0x -c tests.cpp
 
 clean :
-	rm tests renderMaze.o tests.o
+	rm tests $(OBJECTS)
