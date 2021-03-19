@@ -3,7 +3,7 @@
 
 #include <vector>
 
-using char_grid_t = std::vector<std::vector<std::char>>;
+using char_grid_t = std::vector<std::vector<char>>;
 using bool_grid_t = std::vector<std::vector<bool>>; 
 
 char_grid_t renderMaze(const bool_grid_t &maze);
