@@ -1,6 +1,6 @@
 CXX 		= g++
 CXXFLAGS 	= -std=c++0x -Wall 
-OBJECTS 	= renderMaze.o tests.o
+OBJECTS 	= renderMaze.o tests.o generateMaze.o
 
 tests : $(OBJECTS)
 	$(CXX) $(CXXFLAGS) -o tests $(OBJECTS)
@@ -8,7 +8,7 @@ tests : $(OBJECTS)
 renderMaze.o : renderMaze.cpp renderMaze.h maze.h
 	$(CXX) $(CXXFLAGS) -c renderMaze.cpp
 
-tests.o : tests.cpp renderMaze.h maze.h
+tests.o : tests.cpp renderMaze.h maze.h generateMaze.h
 	$(CXX) $(CXXFLAGS) -c tests.cpp
 
 clean :
