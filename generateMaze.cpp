@@ -5,34 +5,34 @@
 #include "generateMaze.h"
 
 std::pair<int, int> chooseStartLocation(int side_len) {
-	return std::make_pair(0, 0);
+  return std::make_pair(0, 0);
 }
 
 void buildSolutionPath(maze::bool_grid_t &maze, 
-					   std::pair<int, int> start_loc) {
-	return;
+             std::pair<int, int> start_loc) {
+  return;
 } 
 
 void buildBranches(maze::bool_grid_t &maze, std::pair<int, int> start_loc) {
-	return;
+  return;
 }
 
 maze::bool_grid_t generateMaze(int side_len) {
-	assert(side_len > 0);
+  assert(side_len > 0);
 
-	maze::bool_grid_t new_maze( side_len, std::vector<bool>(side_len, false) );
+  maze::bool_grid_t new_maze( side_len, std::vector<bool>(side_len, false) );
 
-	// minimum side length for which a maze could be created
-	constexpr int MIN_SIDE_LEN{ 3 };
-	if (side_len < MIN_SIDE_LEN) {
-		return new_maze;
-	}
+  // minimum side length for which a maze could be created
+  constexpr int MIN_SIDE_LEN{ 3 };
+  if (side_len < MIN_SIDE_LEN) {
+    return new_maze;
+  }
 
-	auto start_loc{ chooseStartLocation(side_len) };
+  auto start_loc{ chooseStartLocation(side_len) };
 
-	buildSolutionPath(new_maze, start_loc);
+  buildSolutionPath(new_maze, start_loc);
 
-	buildBranches(new_maze, start_loc);
+  buildBranches(new_maze, start_loc);
 
-	return new_maze;	
+  return new_maze;  
 }
