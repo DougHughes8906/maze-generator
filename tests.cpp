@@ -1,6 +1,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include "maze.h"
 #include "renderMaze.h"
 
 /*
@@ -39,21 +40,18 @@ void testTrue(bool test_value, const std::string &error_message) {
 
 // tests the renderMaze function
 void testRenderMaze() {
-	const bool_grid_t test_grid{
+	const maze::bool_grid_t test_grid{
 		{ true, true, false, true },
 		{ true, true, false, true },
 		{ true, false, false, true },
 		{ true, false, true, true }
 	};
-
-	constexpr char wall_chtr{ 'X' };
-	constexpr char path_chtr{ ' ' };
-
-	const char_grid_t expected_grid{
-		{ wall_chtr, wall_chtr, path_chtr, wall_chtr },
-		{ wall_chtr, wall_chtr, path_chtr, wall_chtr },
-		{ wall_chtr, path_chtr, path_chtr, wall_chtr },
-		{ wall_chtr, path_chtr, wall_chtr, wall_chtr }
+	
+	const maze::char_grid_t expected_grid{
+		{ maze::wall_chtr, maze::wall_chtr, maze::path_chtr, maze::wall_chtr },
+		{ maze::wall_chtr, maze::wall_chtr, maze::path_chtr, maze::wall_chtr },
+		{ maze::wall_chtr, maze::path_chtr, maze::path_chtr, maze::wall_chtr },
+		{ maze::wall_chtr, maze::path_chtr, maze::wall_chtr, maze::wall_chtr }
 	};
 
 	const std::string test_fail_message{ "Test fail: renderMaze function "

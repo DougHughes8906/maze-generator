@@ -1,5 +1,6 @@
 #include "renderMaze.h"
+#include "maze.h"
 
-char_grid_t renderMaze(const bool_grid_t &maze) {
-	return char_grid_t();
+maze::char_grid_t renderMaze(const maze::bool_grid_t &maze) {
+	return maze::char_grid_t();
 }
