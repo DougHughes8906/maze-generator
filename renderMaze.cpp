@@ -1,4 +1,5 @@
 #include <vector>
+#include <iostream>
 #include "renderMaze.h"
 #include "maze.h"
 
@@ -14,4 +15,13 @@ maze::char_grid_t renderMaze(const maze::bool_grid_t &maze) {
   }
 
   return char_maze;
+}
+
+void printMaze(const maze::char_grid_t &maze) {
+  for (const auto &row : maze) {
+    for (char val : row) {
+      std::cout << val;
+    }
+    std::cout << "\n";
+  }
 }
