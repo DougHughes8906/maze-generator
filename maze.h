@@ -9,6 +9,7 @@ namespace maze
   constexpr char wall_chtr{ 'X' };
   constexpr char path_chtr{ ' ' };
   constexpr int MIN_SIDE_LEN{ 3 };
+  constexpr int MAX_SIDE_LEN{ 80 };
 }
 
 #endif
