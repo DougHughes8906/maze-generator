@@ -21,10 +21,8 @@ maze::bool_grid_t generateMaze(int side_len) {
   assert(side_len > 0);
 
   maze::bool_grid_t new_maze( side_len, std::vector<bool>(side_len, false) );
-
-  // minimum side length for which a maze could be created
-  constexpr int MIN_SIDE_LEN{ 3 };
-  if (side_len < MIN_SIDE_LEN) {
+ 
+  if (side_len < maze::MIN_SIDE_LEN) {
     return new_maze;
   }
 
