@@ -11,7 +11,7 @@
 */
 template <typename T>
 bool gridsEqual(const std::vector<std::vector<T>> &grid_a, 
-    const std::vector<std::vector<T>> &grid_b) {
+                const std::vector<std::vector<T>> &grid_b) {
   if (grid_a.size() != grid_b.size()) {
     return false;
   }

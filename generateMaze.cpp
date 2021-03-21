@@ -9,7 +9,7 @@ std::pair<int, int> chooseStartLocation(int side_len) {
 }
 
 void buildSolutionPath(maze::bool_grid_t &maze, 
-             std::pair<int, int> start_loc) {
+                       std::pair<int, int> start_loc) {
   return;
 } 
 
