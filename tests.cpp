@@ -73,12 +73,12 @@ bool checkValid(const maze::bool_grid_t &maze) {
 // mazes. A maze is considered valid if it has a non-adjacent
 // entrance and exit, and there is a path from the entrance
 // to the exit.
-void testValidMaze(const std::mit19937 &random_engine) {
+void testValidMaze(std::mt19937 &random_engine) {
   
   auto small_maze{ generateMaze(maze::MIN_SIDE_LEN) };
   checkValid(small_maze);
 
-  constexpr num_test_runs{ 100 };
+  constexpr int num_test_runs{ 100 };
   std::uniform_int_distribution<int> distribution(maze::MIN_SIDE_LEN,
                                                   maze::MAX_SIDE_LEN);
   const std::string error_start{ "Test failed, invalid maze: \n" };
@@ -88,8 +88,9 @@ void testValidMaze(const std::mit19937 &random_engine) {
     auto test_maze{ generateMaze(num_sides) };
     bool maze_valid{ checkValid(test_maze) };
     if (!maze_valid) {
-      auto error_message = error_start + printMaze(test_maze);
-      std::cout << error_message << "\n\n";
+      std::cout << error_start; 
+      printMaze(renderMaze(test_maze)); 
+      std::cout << "\n\n";
     } 
   }
 }
