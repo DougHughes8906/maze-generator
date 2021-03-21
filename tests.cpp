@@ -1,8 +1,10 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <random>
 #include "maze.h"
 #include "renderMaze.h"
+#include "generateMaze.h"
 
 /*
   Tests that two 2D vectors have the same number of rows, the 
@@ -61,8 +63,44 @@ void testRenderMaze() {
     test_fail_message);
 }
 
-int main() {    
+// checks to see if a single maze is valid
+bool checkValid(const maze::bool_grid_t &maze) {
+  return false;
+}
+
+
+// tests that the generateMaze function generates "valid"
+// mazes. A maze is considered valid if it has a non-adjacent
+// entrance and exit, and there is a path from the entrance
+// to the exit.
+void testValidMaze(const std::mit19937 &random_engine) {
+  
+  auto small_maze{ generateMaze(maze::MIN_SIDE_LEN) };
+  checkValid(small_maze);
+
+  constexpr num_test_runs{ 100 };
+  std::uniform_int_distribution<int> distribution(maze::MIN_SIDE_LEN,
+                                                  maze::MAX_SIDE_LEN);
+  const std::string error_start{ "Test failed, invalid maze: \n" };
+
+  for (int i{ 0 }; i < num_test_runs; ++i) {
+    int num_sides{ distribution(random_engine) }; 
+    auto test_maze{ generateMaze(num_sides) };
+    bool maze_valid{ checkValid(test_maze) };
+    if (!maze_valid) {
+      auto error_message = error_start + printMaze(test_maze);
+      std::cout << error_message << "\n\n";
+    } 
+  }
+}
+
+int main() {
+  // set up random engine
+  std::random_device rd;
+  std::mt19937 random_engine(rd());  
+ 
   testRenderMaze(); 
+  testValidMaze(random_engine);
 
   return 0;
 }
