@@ -20,7 +20,7 @@ void buildBranches(maze::bool_grid_t &maze, std::pair<int, int> start_loc) {
 maze::bool_grid_t generateMaze(int side_len) {
   assert(side_len > 0);
 
-  maze::bool_grid_t new_maze( side_len, std::vector<bool>(side_len, false) );
+  maze::bool_grid_t new_maze( side_len, std::vector<bool>(side_len, true) );
  
   if (side_len < maze::MIN_SIDE_LEN) {
     return new_maze;
