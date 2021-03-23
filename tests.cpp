@@ -115,11 +115,49 @@ std::pair<int, int> findStart(const maze::bool_grid_t &maze) {
   return start_loc;
 }
 
-void addOpenAdjacent(std::queue<std::pair<int, int> &next_locs,
+// helper function to addOpenAdjacent
+// pushes a location into next_locs if it is "valid"
+// valid meaning it is a path area and is unexplored
+void pushIfValid(std::queue<std::pair<int, int>> &next_locs,
+                 const maze::bool_grid_t &maze, 
+                 const maze::bool_grid_t &explored,
+                 const std::pair<int, int> &location) {
+  if (!maze[location.first][location.second] &&
+      !explored[location.first][location.second]) {
+    next_locs.push(location);
+  } 
+}
+
+// helper function to findPath
+// Adds any valid open, unexplored path locations adjacent
+// to the given location to the next_locs queue
+void addOpenAdjacent(std::queue<std::pair<int, int>> &next_locs,
                      const maze::bool_grid_t &maze, 
                      const maze::bool_grid_t &explored,
                      const std::pair<int, int> &location) {
-  return;
+  int left_col{ location.second - 1 };
+  if (left_col >= 0) {
+    std::pair<int, int> left_loc(location.first, left_col);
+    pushIfValid(next_locs, maze, explored, left_loc);
+  }
+
+  int right_col{ location.second + 1 };
+  if (right_col < maze[location.first].size()) {
+    std::pair<int, int> right_loc(location.first, right_col);
+    pushIfValid(next_locs, maze, explored, right_loc); 
+  }
+
+  int row_above{ location.first - 1 };
+  if (row_above >= 0) {
+    std::pair<int, int> above_loc(row_above, location.second);
+    pushIfValid(next_locs, maze, explored, above_loc);
+  }
+
+  int row_below{ location.first + 1 };
+  if (row_below < maze.size()) {
+    std::pair<int, int> below_loc(row_below, location.second);
+    pushIfValid(next_locs, maze, explored, below_loc);
+  } 
 }       
 
 // returns true if the end of the maze can be reached
@@ -134,7 +172,7 @@ bool findPath(const maze::bool_grid_t &maze,
   // mark another grid with explored locations
   maze::bool_grid_t explored;
   for (const auto &row : maze) {
-    explored.push_back(row.size(), false);
+    explored.push_back(std::vector<bool>(row.size(), false));
   }
 
   explored[start_loc.first][start_loc.second] = true;
