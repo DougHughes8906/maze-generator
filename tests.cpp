@@ -2,6 +2,7 @@
 #include <vector>
 #include <iostream>
 #include <random>
+#include <queue>
 #include "maze.h"
 #include "renderMaze.h"
 #include "generateMaze.h"
@@ -112,6 +113,56 @@ std::pair<int, int> findStart(const maze::bool_grid_t &maze) {
   }
 
   return start_loc;
+}
+
+void addOpenAdjacent(std::queue<std::pair<int, int> &next_locs,
+                     const maze::bool_grid_t &maze, 
+                     const maze::bool_grid_t &explored,
+                     const std::pair<int, int> &location) {
+  return;
+}       
+
+// returns true if the end of the maze can be reached
+// from the start and false otherwise.
+//
+// PRECONDITION: there is a single start location and
+// a single end location
+bool findPath(const maze::bool_grid_t &maze, 
+              const std::pair<int, int> &start_loc) {
+  // perform a breadth first search
+  
+  // mark another grid with explored locations
+  maze::bool_grid_t explored;
+  for (const auto &row : maze) {
+    explored.push_back(row.size(), false);
+  }
+
+  explored[start_loc.first][start_loc.second] = true;
+
+  std::queue<std::pair<int, int>> next_locs;
+
+  addOpenAdjacent(next_locs, maze, explored, start_loc);
+
+  const int first_row{ 0 };
+  const int last_row{ static_cast<int>(maze.size() - 1) };
+  const int first_col{ 0 };
+  const int last_col{ static_cast<int>(maze[last_row].size() - 1) };
+
+  // perform the search
+  while(!next_locs.empty()) {
+    auto cur_loc{ next_locs.front() };
+    next_locs.pop();
+    explored[cur_loc.first][cur_loc.second] = true;
+
+    if (cur_loc.first == first_row || cur_loc.first == last_row ||
+        cur_loc.second == first_col || cur_loc.second == last_col) {
+      return true;
+    } 
+
+    addOpenAdjacent(next_locs, maze, explored, cur_loc);
+  }
+
+  return false;
 }
 
 // checks to see if a single maze is valid
