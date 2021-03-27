@@ -1,6 +1,7 @@
 #include <utility>
 #include <vector>
 #include <cassert>
+#include <random>
 #include "maze.h"
 #include "generateMaze.h"
 
@@ -17,7 +18,7 @@ void buildBranches(maze::bool_grid_t &maze, std::pair<int, int> start_loc) {
   return;
 }
 
-maze::bool_grid_t generateMaze(int side_len) {
+maze::bool_grid_t generateMaze(int side_len, std::mt19937 &random_engine) {
   assert(side_len > 0);
 
   maze::bool_grid_t new_maze( side_len, std::vector<bool>(side_len, true) );
