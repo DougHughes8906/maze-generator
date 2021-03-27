@@ -221,7 +221,7 @@ bool checkValid(const maze::bool_grid_t &maze) {
 // to the exit.
 void testValidMaze(std::mt19937 &random_engine) {
   
-  auto small_maze{ generateMaze(maze::MIN_SIDE_LEN) };
+  auto small_maze{ generateMaze(maze::MIN_SIDE_LEN, random_engine) };
   checkValid(small_maze);
 
   constexpr int num_test_runs{ 100 };
@@ -231,7 +231,7 @@ void testValidMaze(std::mt19937 &random_engine) {
 
   for (int i{ 0 }; i < num_test_runs; ++i) {
     int num_sides{ distribution(random_engine) }; 
-    auto test_maze{ generateMaze(num_sides) };
+    auto test_maze{ generateMaze(num_sides, random_engine) };
     bool maze_valid{ checkValid(test_maze) };
     if (!maze_valid) {
       std::cout << error_start; 
