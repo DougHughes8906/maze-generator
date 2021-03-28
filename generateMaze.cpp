@@ -5,7 +5,8 @@
 #include "maze.h"
 #include "generateMaze.h"
 
-std::pair<int, int> chooseStartLocation(int side_len) {
+std::pair<int, int> chooseStartLocation(int side_len, 
+                                        std::mt19937 &random_engine) {
   return std::make_pair(0, 0);
 }
 
@@ -27,7 +28,7 @@ maze::bool_grid_t generateMaze(int side_len, std::mt19937 &random_engine) {
     return new_maze;
   }
 
-  auto start_loc{ chooseStartLocation(side_len) };
+  auto start_loc{ chooseStartLocation(side_len, random_engine) };
 
   buildSolutionPath(new_maze, start_loc);
 
