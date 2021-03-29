@@ -16,7 +16,7 @@ std::pair<int, int> chooseStartLocation(int side_len,
   std::uniform_int_distribution<int> border_distribution(maze::MIN_BORDER_INT, 
                                                          maze::MAX_BORDER_INT);
 
-  Border chosen_border{ 
+  maze::Border chosen_border{ 
     static_cast<maze::Border>(border_distribution(random_engine))
   };
    
@@ -93,16 +93,16 @@ void buildSolutionPath(maze::bool_grid_t &maze,
   auto next_loc{ start_loc };
 
   switch(start_direction) {
-    case maze::up:
+    case maze::Direction::up:
       --(next_loc.first);
       break;
-    case maze::down:
+    case maze::Direction::down:
       ++(next_loc.first);
       break;
-    case maze::left:
+    case maze::Direction::left:
       --(next_loc.second);
       break;
-    case maze::right:
+    case maze::Direction::right:
       ++(next_loc.first);
       break;
     default:
