@@ -60,10 +60,34 @@ void buildSolutionPath(maze::bool_grid_t &maze,
   const int maze_side_len{ static_cast<int>(maze.size()) };
 
   // open the starting location
-  maze[start_loc.first][start_loc.second] = false;
+  openLocation(start_loc, maze); 
 
   // find starting direction
-  
+  maze::Direction start_direction{ getStartDirection(start_loc) };
+
+  // determine the next path location based on the starting 
+  // direction
+  auto next_loc{ start_loc };
+
+  switch(start_direction) {
+    case maze::up:
+      --(next_loc.first);
+      break;
+    case maze::down:
+      ++(next_loc.first);
+      break;
+    case maze::left:
+      --(next_loc.second);
+      break;
+    case maze::right:
+      ++(next_loc.first);
+      break;
+    default:
+      break;
+  };
+
+  // open the next location
+  openLocation(next_loc, maze);  
 
   
 } 
