@@ -11,24 +11,13 @@
 // locations.
 std::pair<int, int> chooseStartLocation(int side_len, 
                                         std::mt19937 &random_engine) {
-  std::pair<int, int> start_loc(0, 0);
- 
-  enum class Border
-  {
-    top,
-    bottom,
-    left,
-    right
-  };
+  std::pair<int, int> start_loc(0, 0); 
 
-  static constexpr int MIN_BORDER{ 0 };
-  static constexpr int MAX_BORDER{ 3 };
-
-  std::uniform_int_distribution<int> border_distribution(MIN_BORDER, 
-                                                         MAX_BORDER);
+  std::uniform_int_distribution<int> border_distribution(maze::MIN_BORDER_INT, 
+                                                         maze::MAX_BORDER_INT);
 
   Border chosen_border{ 
-    static_cast<Border>(border_distribution(random_engine))
+    static_cast<maze::Border>(border_distribution(random_engine))
   };
    
   const int MIN_INDEX{ 1 };
@@ -40,17 +29,17 @@ std::pair<int, int> chooseStartLocation(int side_len,
   int chosen_index{ index_distribution(random_engine) };
 
   switch(chosen_border) {
-    case Border::top:
+    case maze::Border::top:
       start_loc.second = chosen_index; 
       break; 
-    case Border::bottom:
+    case maze::Border::bottom:
       start_loc.first = side_len - 1;
       start_loc.second = chosen_index;
       break;
-    case Border::left:
+    case maze::Border::left:
       start_loc.first = chosen_index;
       break;
-    case Border::right:
+    case maze::Border::right:
       start_loc.first = chosen_index;
       start_loc.second = side_len - 1;
       break;
@@ -64,9 +53,19 @@ std::pair<int, int> chooseStartLocation(int side_len,
   return start_loc;
 }
 
+// builds a single path from one border location to another that can be
+// used to solve the maze
 void buildSolutionPath(maze::bool_grid_t &maze, 
                        std::pair<int, int> start_loc) {
-  return;
+  const int maze_side_len{ static_cast<int>(maze.size()) };
+
+  // open the starting location
+  maze[start_loc.first][start_loc.second] = false;
+
+  // find starting direction
+  
+
+  
 } 
 
 void buildBranches(maze::bool_grid_t &maze, std::pair<int, int> start_loc) {

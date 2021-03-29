@@ -10,6 +10,16 @@ namespace maze
   constexpr char path_chtr{ ' ' };
   constexpr int MIN_SIDE_LEN{ 3 };
   constexpr int MAX_SIDE_LEN{ 80 };
+  static constexpr int MIN_BORDER_INT{ 0 };
+  static constexpr int MAX_BORDER_INT{ 3 };
+
+  enum class Border
+  {
+    top,
+    bottom,
+    left,
+    right
+  };
 
   enum class Direction
   {
