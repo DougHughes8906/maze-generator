@@ -10,6 +10,14 @@ namespace maze
   constexpr char path_chtr{ ' ' };
   constexpr int MIN_SIDE_LEN{ 3 };
   constexpr int MAX_SIDE_LEN{ 80 };
+
+  enum class Direction
+  {
+    up,
+    down,
+    left,
+    right
+  };
 }
 
 #endif
