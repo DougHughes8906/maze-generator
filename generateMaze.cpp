@@ -53,6 +53,13 @@ std::pair<int, int> chooseStartLocation(int side_len,
   return start_loc;
 }
 
+// sets a given location in the maze to false indicating that it is
+// a path area of the maze
+// PRECONDITION: the given location is a valid location within the maze
+void openLocation(std::pair<int, int> location, maze::bool_grid_t &maze) {
+  maze[location.first][location.second] = false;
+}
+
 // builds a single path from one border location to another that can be
 // used to solve the maze
 void buildSolutionPath(maze::bool_grid_t &maze, 
