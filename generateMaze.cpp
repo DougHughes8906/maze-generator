@@ -60,6 +60,19 @@ void openLocation(std::pair<int, int> location, maze::bool_grid_t &maze) {
   maze[location.first][location.second] = false;
 }
 
+// finds the starting direciton for a maze based on the starting location
+maze::Direction getStartDirection(std::pair<int, int> start_loc, int side_len) {
+  if (start_loc.first == 0) {
+    return maze::Direction::down;
+  } else if (start_loc.first == side_len - 1) {
+    return maze::Direction::up;
+  } else if (start_loc.second == 0) {
+    return maze::Direction::right;
+  } else {
+    return maze::Direction::left;
+  }
+}
+
 // builds a single path from one border location to another that can be
 // used to solve the maze
 void buildSolutionPath(maze::bool_grid_t &maze, 
@@ -70,7 +83,10 @@ void buildSolutionPath(maze::bool_grid_t &maze,
   openLocation(start_loc, maze); 
 
   // find starting direction
-  maze::Direction start_direction{ getStartDirection(start_loc) };
+  maze::Direction start_direction
+  { 
+    getStartDirection(start_loc, maze_side_len) 
+  };
 
   // determine the next path location based on the starting 
   // direction
