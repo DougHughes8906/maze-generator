@@ -38,7 +38,7 @@ namespace maze
     forward,
     right,
     left
-  }
+  };
 }
 
 #endif
