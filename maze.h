@@ -28,6 +28,15 @@ namespace maze
     left,
     right
   };
+
+  // direction from first person perspective as if they were going
+  // through the maze
+  enum class RelativeDirection
+  {
+    forward,
+    right,
+    left
+  }
 }
 
 #endif
