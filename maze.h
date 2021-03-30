@@ -21,6 +21,8 @@ namespace maze
     right
   };
 
+  // The objective directions on the board. Ex. "up" is toward
+  // the top row of the maze (i.e. index 0 row)
   enum class Direction
   {
     up,
