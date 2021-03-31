@@ -12,10 +12,13 @@ struct ChoiceInfo {
   std::pair<int, int> location;
   bool available;
   int probability;
-  ChoiceInfo(std::pair<int, int> loc, bool is_avail, int prob) {
+  maze::Direction direction;
+  ChoiceInfo(std::pair<int, int> loc, bool is_avail, int prob,
+             maze::Direction new_direction) {
     location = loc;
     available = is_avail;
     probability = prob;
+    direction = new_direction;
   }
 };
 
@@ -220,9 +223,12 @@ void buildSolutionPath(maze::bool_grid_t &maze,
     bool right_avail{ canOpenPath(right_loc, maze) };
     bool left_avail{ canOpenPath(left_loc, maze) }; 
 
-    ChoiceInfo forward_info(forward_loc, forward_avail, forward_probability);
-    ChoiceInfo right_info(right_loc, right_avail, right_probability);
-    ChoiceInfo left_info(left_loc, left_avail, left_probability);
+    ChoiceInfo forward_info(forward_loc, forward_avail, forward_probability,
+                            forward_direction);
+    ChoiceInfo right_info(right_loc, right_avail, right_probability,
+                          right_direction);
+    ChoiceInfo left_info(left_loc, left_avail, left_probability,
+                         left_direction);
     cur_loc = chooseNextLocation(forward_info, right_info, left_info,
                                  random_engine);
  
