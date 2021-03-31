@@ -86,45 +86,30 @@ maze::Direction getStartDirection(std::pair<int, int> start_loc, int side_len) {
   }
 }
 
-// Returns a new location based on a current location, a current objective
-// direction (ex. facing up towards the top of the board), and a desired
-// relative direction to move (ex. forward according to the current direction
+// Returns a new location based on a current location, and the direction
+// to move (the objective direction, ex. towards the top of the maze)
 // NOTE: this function does not check to see if the new location is "valid",
 // i.e. within the boundaries of a maze
 std::pair<int, int> getAdjacent(std::pair<int, int> cur_loc, 
-                                maze::Direction cur_direction,
-                                maze::RelativeDirection where_to_move) {
+                                maze::Direction direction_to_move) {
   auto next_loc{ cur_loc };
 
-  // a move up towards the top of the maze
-  if ((cur_direction == maze::Direction::up && 
-       where_to_move == maze::RelativeDirection::forward) ||
-      (cur_direction == maze::Direction::left &&
-       where_to_move == maze::RelativeDirection::right) ||
-      (cur_direction == maze::Direction::right &&
-       where_to_move == maze::RelativeDirection::left)) {
-    --(next_loc.first);
-  } // a move towards the bottom of the maze
-  else if ((cur_direction == maze::Direction::down &&
-            where_to_move == maze::RelativeDirection::forward) ||
-           (cur_direction == maze::Direction::left &&
-            where_to_move == maze::RelativeDirection::left) ||
-           (cur_direction == maze::Direction::right &&
-            where_to_move == maze::RelativeDirection::right)) {
-    ++(next_loc.first);
-  } // a move towards the right border of the maze
-  else if ((cur_direction == maze::Direction::right &&
-            where_to_move == maze::RelativeDirection::forward) ||
-           (cur_direction == maze::Direction::up &&
-            where_to_move == maze::RelativeDirection::right) ||
-           (cur_direction == maze::Direction::down &&
-            where_to_move == maze::RelativeDirection::left)) {
-    ++(next_loc.second);
-  } // a move towards the left border of the maze
-  else {
-    --(next_loc.second);
-  }
-
+  switch(direction_to_move) {
+    case maze::Direction::up:
+      --(next_loc.first);
+      break;
+    case maze::Direction::down:
+      ++(next_loc.first);
+      break;
+    case maze::Direction::left:
+      --(next_loc.second);
+    case maze::Direction::right:
+      ++(next_loc.second);
+      break;
+    default:
+      break;  
+  };
+ 
   return next_loc;
 }
 
@@ -153,6 +138,41 @@ bool isBorder(std::pair<int, int> location, const maze::bool_grid_t &maze) {
   return true;
 } 
 
+// find a new direction based on a current direction and where you
+// are turning. Ex. currently facing the top of the maze and turning right
+// - now facing the right of the maze
+maze::Direction findDirection(maze::Direction cur_direction, 
+                              maze::RelativeDirection where_to_move) {
+  // a turn towards the top of the maze
+  if ((cur_direction == maze::Direction::up && 
+       where_to_move == maze::RelativeDirection::forward) ||
+      (cur_direction == maze::Direction::left &&
+       where_to_move == maze::RelativeDirection::right) ||
+      (cur_direction == maze::Direction::right &&
+       where_to_move == maze::RelativeDirection::left)) {
+    return maze::Direction::top;    
+  } // a turn towards the bottom of the maze
+  else if ((cur_direction == maze::Direction::down &&
+            where_to_move == maze::RelativeDirection::forward) ||
+           (cur_direction == maze::Direction::left &&
+            where_to_move == maze::RelativeDirection::left) ||
+           (cur_direction == maze::Direction::right &&
+            where_to_move == maze::RelativeDirection::right)) {
+    return maze::Direction::bottom;
+  } // a turn towards the right border of the maze
+  else if ((cur_direction == maze::Direction::right &&
+            where_to_move == maze::RelativeDirection::forward) ||
+           (cur_direction == maze::Direction::up &&
+            where_to_move == maze::RelativeDirection::right) ||
+           (cur_direction == maze::Direction::down &&
+            where_to_move == maze::RelativeDirection::left)) {
+    return maze::Direction::right;
+  } // a turn towards the left border of the maze
+  else {
+    return maze::Direction::left;
+  }
+}
+
 // builds a single path from one border location to another that can be
 // used to solve the maze
 void buildSolutionPath(maze::bool_grid_t &maze, 
@@ -171,8 +191,7 @@ void buildSolutionPath(maze::bool_grid_t &maze,
 
   // determine the next path location based on the starting 
   // direction (one space forward from starting)
-  auto cur_loc{ getAdjacent(start_loc, start_direction, 
-                            maze::RelativeDirection::forward) }; 
+  auto cur_loc{ getAdjacent(start_loc, start_direction) }; 
 
   // open the next location
   openLocation(cur_loc, maze);  
@@ -188,12 +207,14 @@ void buildSolutionPath(maze::bool_grid_t &maze,
   // flag used to determine when the solution path building is finished
   bool finished{ false };
   while (!finished) {
-    auto forward_loc{ getAdjacent(cur_loc, cur_direction,
-                                  maze::RelativeDirection::forward) }; 
-    auto right_loc{ getAdjacent(cur_loc, cur_direction,
-                                maze::RelativeDirection::right) }; 
-    auto left_loc{ getAdjacent(cur_loc, cur_direction,
-                               maze::RelativeDirection::left) }; 
+    auto forward_direction{ cur_direction };
+    auto forward_loc{ getAdjacent(cur_loc, forward_direction) };
+    auto right_direction{ findDirection(cur_direction, 
+                                        maze::RelativeDirection::right) }; 
+    auto right_loc{ getAdjacent(cur_loc, right_direction) };
+    auto left_direction{ findDirection(cur_direction,
+                                       maze::RelativeDirection::left) }; 
+    auto left_loc{ getAdjacent(cur_loc, left_direction) }; 
 
     bool forward_avail{ canOpenPath(forward_loc, maze) };
     bool right_avail{ canOpenPath(right_loc, maze) };
