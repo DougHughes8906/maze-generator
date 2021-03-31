@@ -150,7 +150,7 @@ maze::Direction findDirection(maze::Direction cur_direction,
        where_to_move == maze::RelativeDirection::right) ||
       (cur_direction == maze::Direction::right &&
        where_to_move == maze::RelativeDirection::left)) {
-    return maze::Direction::top;    
+    return maze::Direction::up;    
   } // a turn towards the bottom of the maze
   else if ((cur_direction == maze::Direction::down &&
             where_to_move == maze::RelativeDirection::forward) ||
@@ -158,7 +158,7 @@ maze::Direction findDirection(maze::Direction cur_direction,
             where_to_move == maze::RelativeDirection::left) ||
            (cur_direction == maze::Direction::right &&
             where_to_move == maze::RelativeDirection::right)) {
-    return maze::Direction::bottom;
+    return maze::Direction::down;
   } // a turn towards the right border of the maze
   else if ((cur_direction == maze::Direction::right &&
             where_to_move == maze::RelativeDirection::forward) ||
