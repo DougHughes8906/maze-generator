@@ -130,11 +130,11 @@ bool canOpenPath(std::pair<int, int> location, const maze::bool_grid_t &maze) {
 // If only one of right and left is available, the remaining choice gets
 //  the probability of both. 
 // If no choice is available, a location of (0, 0) is returned.
-std::pair<int, int> chooseNextLocation(const ChoiceInfo &forward_info,
+ChoiceInfo chooseNextLocation(const ChoiceInfo &forward_info,
                                        const ChoiceInfo &right_info,
                                        const ChoiceInfo &left_info,
                                        std::mt19937 &random_engine) {
-  return forward_info.location;
+  return forward_info;
 }
 
 bool isBorder(std::pair<int, int> location, const maze::bool_grid_t &maze) {
@@ -229,8 +229,11 @@ void buildSolutionPath(maze::bool_grid_t &maze,
                           right_direction);
     ChoiceInfo left_info(left_loc, left_avail, left_probability,
                          left_direction);
-    cur_loc = chooseNextLocation(forward_info, right_info, left_info,
+    auto next_choice = chooseNextLocation(forward_info, right_info, left_info,
                                  random_engine);
+
+    cur_loc = next_choice.location;
+    cur_direction = next_choice.direction;
  
     openLocation(cur_loc, maze);
     finished = isBorder(cur_loc, maze);
