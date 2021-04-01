@@ -116,11 +116,50 @@ std::pair<int, int> getAdjacent(std::pair<int, int> cur_loc,
   return next_loc;
 }
 
+// returns true if a given location in the given maze is a path location
+// PRECONDITION: the location is a valid location in the maze
+bool isPath(std::pair<int, int> location, const maze::bool_grid_t &maze) {
+  return false;
+}
+
 // determines if path can be opened in a given location. It cannot be opened
-// if there will be two whitespaces next to it
+// if there will be two path spaces next to it
 // PRECONDITION: the location is a valid location in the maze
 bool canOpenPath(std::pair<int, int> location, const maze::bool_grid_t &maze) {
-  return true;
+  int num_path_adjacent{ 0 };
+
+  // check up
+  if (location.first > 0) {
+    auto up_loc{ getAdjacent(location, maze::Direction::up) };
+    if (isPath(up_loc, maze)) {
+      ++num_path_adjacent;
+    }
+  } 
+  // check down
+  int last_row_ind{ static_cast<int>(maze.size() - 1) };
+  if (location.first < last_row_ind) {
+    auto down_loc{ getAdjacent(location, maze::Direction::down) };
+    if (isPath(down_loc, maze)) {
+      ++num_path_adjacent;
+    }
+  }
+  // check right
+  int last_col_ind{ static_cast<int>(maze[location.first].size() - 1) };
+  if (location.second < last_col_ind) {
+    auto right_loc{ getAdjacent(location, maze::Direction::right) };
+    if (isPath(right_loc, maze)) {
+      ++num_path_adjacent;
+    }
+  }
+  // check left
+  if (location.second > 0) {
+    auto left_loc{ getAdjacent(location, maze::Direction::left) };
+    if (isPath(left_loc, maze)) {
+      ++num_path_adjacent;
+    }
+  }
+  
+  return (num_path_adjacent < 2); 
 }
 
 // randomly chooses a location based on the probabilities passed in with
