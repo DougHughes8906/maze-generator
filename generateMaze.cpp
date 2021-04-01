@@ -73,7 +73,7 @@ std::pair<int, int> chooseStartLocation(int side_len,
 // a path area of the maze
 // PRECONDITION: the given location is a valid location within the maze
 void openLocation(std::pair<int, int> location, maze::bool_grid_t &maze) {
-  maze[location.first][location.second] = false;
+  maze[location.first][location.second] = maze::path_val;
 }
 
 // finds the starting direciton for a maze based on the starting location
@@ -119,7 +119,7 @@ std::pair<int, int> getAdjacent(std::pair<int, int> cur_loc,
 // returns true if a given location in the given maze is a path location
 // PRECONDITION: the location is a valid location in the maze
 bool isPath(std::pair<int, int> location, const maze::bool_grid_t &maze) {
-  return (!maze[location.first][location.second]); 
+  return (maze[location.first][location.second] == maze::path_val); 
 }
 
 // determines if path can be opened in a given location. It cannot be opened
@@ -290,7 +290,8 @@ void buildBranches(maze::bool_grid_t &maze, std::pair<int, int> start_loc) {
 maze::bool_grid_t generateMaze(int side_len, std::mt19937 &random_engine) {
   assert(side_len > 0);
 
-  maze::bool_grid_t new_maze( side_len, std::vector<bool>(side_len, true) );
+  maze::bool_grid_t new_maze( side_len, std::vector<bool>(side_len, 
+                                                          maze::wall_chtr) );
  
   if (side_len < maze::MIN_SIDE_LEN) {
     return new_maze;
