@@ -119,7 +119,7 @@ std::pair<int, int> getAdjacent(std::pair<int, int> cur_loc,
 // returns true if a given location in the given maze is a path location
 // PRECONDITION: the location is a valid location in the maze
 bool isPath(std::pair<int, int> location, const maze::bool_grid_t &maze) {
-  return false;
+  return (maze[location.first][location.second] == maze::path_chtr); 
 }
 
 // determines if path can be opened in a given location. It cannot be opened
