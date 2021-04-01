@@ -176,8 +176,12 @@ ChoiceInfo chooseNextLocation(const ChoiceInfo &forward_info,
   return forward_info;
 }
 
-bool isBorder(std::pair<int, int> location, const maze::bool_grid_t &maze) {
-  return true;
+// returns true if a given location in the maze is on a border
+bool isBorder(std::pair<int, int> location, const maze::bool_grid_t &maze) { 
+  int last_row_ind{ static_cast<int>(maze.size() - 1) };
+  int last_col_ind{ static_cast<int>(maze[location.first].size() - 1) };
+  return (location.first == 0 || location.first == last_row_ind ||
+          location.second == 0 || location.second == last_col_ind); 
 } 
 
 // find a new direction based on a current direction and where you
