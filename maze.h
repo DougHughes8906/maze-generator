@@ -8,6 +8,8 @@ namespace maze
 
   constexpr char wall_chtr{ 'X' };
   constexpr char path_chtr{ ' ' };
+  constexpr bool wall_val{ true };
+  constexpr bool path_val{ false };
   constexpr int MIN_SIDE_LEN{ 3 };
   constexpr int MAX_SIDE_LEN{ 80 };
   static constexpr int MIN_BORDER_INT{ 0 };
