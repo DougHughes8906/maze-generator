@@ -84,7 +84,7 @@ maze::Direction getStartDirection(std::pair<int, int> start_loc, int side_len) {
     return maze::Direction::up;
   } else if (start_loc.second == 0) {
     return maze::Direction::right;
-  } else {
+  } else { 
     return maze::Direction::left;
   }
 }
@@ -106,6 +106,7 @@ std::pair<int, int> getAdjacent(std::pair<int, int> cur_loc,
       break;
     case maze::Direction::left:
       --(next_loc.second);
+      break;
     case maze::Direction::right:
       ++(next_loc.second);
       break;
@@ -224,7 +225,7 @@ maze::Direction findDirection(maze::Direction cur_direction,
 void buildSolutionPath(maze::bool_grid_t &maze, 
                        std::pair<int, int> start_loc,
                        std::mt19937 &random_engine) {
-  const int maze_side_len{ static_cast<int>(maze.size()) };
+  const int maze_side_len{ static_cast<int>(maze.size()) }; 
 
   // open the starting location
   openLocation(start_loc, maze); 
@@ -237,7 +238,7 @@ void buildSolutionPath(maze::bool_grid_t &maze,
 
   // determine the next path location based on the starting 
   // direction (one space forward from starting)
-  auto cur_loc{ getAdjacent(start_loc, start_direction) }; 
+  auto cur_loc{ getAdjacent(start_loc, start_direction) };  
 
   // open the next location
   openLocation(cur_loc, maze);  
