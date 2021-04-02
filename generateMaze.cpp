@@ -167,7 +167,18 @@ bool canOpenPath(std::pair<int, int> location, const maze::bool_grid_t &maze) {
 bool onlyOneAvailable(const ChoiceInfo &choice_1, 
                       const ChoiceInfo &choice_2,
                       const ChoiceInfo &choice_3) {
-  return false;
+  int num_available{ 0 };
+  if (choice_1.available) {
+    ++num_available;
+  }
+  if (choice_2.available) {
+    ++num_available;
+  }
+  if (choice_3.available) {
+    ++num_available;
+  }
+
+  return (num_available == 1);
 }
 
 // returns the first available choice (in the order of the parameters)
