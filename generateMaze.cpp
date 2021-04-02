@@ -163,18 +163,94 @@ bool canOpenPath(std::pair<int, int> location, const maze::bool_grid_t &maze) {
   return (num_path_adjacent < 2); 
 }
 
+// returns true if one and only one of the choices are available
+bool onlyOneAvailable(const ChoiceInfo &choice_1, 
+                      const ChoiceInfo &choice_2,
+                      const ChoiceInfo &choice_3) {
+  return false;
+}
+
+// returns the first available choice (in the order of the parameters)
+ChoiceInfo availableChoice(const ChoiceInfo &choice_1, 
+                           const ChoiceInfo &choice_2,
+                           const ChoiceInfo &choice_3) {
+  return choice_1;
+}
+
 // randomly chooses a location based on the probabilities passed in with
 // the ChoiceInfo structs. Only considers a choice if the location is 
 // available. 
+// There should not be a case where there are no choices available
+//  but if so, the forward_info is returned
 // If only one choice is available that location is returned.
 // If only one of right and left is available, the remaining choice gets
 //  the probability of both. 
-// If no choice is available, a location of (0, 0) is returned.
 ChoiceInfo chooseNextLocation(const ChoiceInfo &forward_info,
                               const ChoiceInfo &right_info,
                               const ChoiceInfo &left_info,
                               std::mt19937 &random_engine) {
-  return forward_info;
+  // check to see if no choices are available
+  if (!(forward_info.available || right_info.available || 
+        left_info.available)) {
+    return forward_info;
+  }
+  // check to see if only one choice is available 
+  else if (onlyOneAvailable(forward_info, right_info, left_info)) {
+    return availableChoice(forward_info, right_info, left_info);
+  } 
+  // check if all available
+  else if (foward_info.available && right_info.available && 
+           left_info.available) {
+    int probability_total{ forward_info.probability + right_info.probability +
+                           left_info.probability };
+
+    int foward_barrier{ forward_info.probability };
+    int right_barrier{ forward_barrier + right_info.probability };
+
+    std::uniform_int_distribution<int> distribution(1, probability_total);
+    int choice_val{ distribution(random_engine) };
+
+    if (choice_val <= forward_barrier) {
+      return forward_info;
+    } else if (choice_val <= right_barrier) {
+      return right_info;
+    } else {
+      return left_info;
+    } 
+  }
+  // check if forward is not available
+  else if (!(forward_info.available)) {
+    int probability_total{ right_info.probability + left_info.probability };
+    int right_barrier{ right_info.probability }; 
+
+    std::uniform_int_distribution<int> distribution(1, probability_total);
+    int choice_val{ distribution(random_engine) };
+
+    if (choice_val <= right_barrier) {
+      return right_info;
+    } else {
+      return left_info;
+    }
+  }
+  // one of right or left is not available
+  else {
+    auto other_probability{ right_info.probability + left_info.probability };
+    auto other_choice = (right_info.available) ? right_info : left_info;
+    other_choice.probability = other_probability;
+
+    int probability_total{ forward_info.probability + 
+                           other_choice.probability };
+    int forward_barrier{ forward_info.probability }; 
+
+    std::uniform_int_distribution<int> distribution(1, probability_total);
+    int choice_val{ distribution(random_engine) };
+
+    if (choice_val <= forward_barrier) {
+      return forward_info;
+    } else {
+      return other_choice;
+    } 
+  }
 }
 
 // returns true if a given location in the maze is on a border
