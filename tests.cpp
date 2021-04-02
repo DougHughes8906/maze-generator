@@ -237,6 +237,11 @@ void testValidMaze(std::mt19937 &random_engine) {
       std::cout << error_start; 
       printMaze(renderMaze(test_maze)); 
       std::cout << "\n\n";
+    }
+    else {
+      std::cout << "Test passed, valid maze:\n";
+      printMaze(renderMaze(test_maze)); 
+      std::cout << "\n\n";
     } 
   }
 }
