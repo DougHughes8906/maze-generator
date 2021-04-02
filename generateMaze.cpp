@@ -182,10 +182,17 @@ bool onlyOneAvailable(const ChoiceInfo &choice_1,
 }
 
 // returns the first available choice (in the order of the parameters)
+// if no choices are available, returns the last choice (choice_3)
 ChoiceInfo availableChoice(const ChoiceInfo &choice_1, 
                            const ChoiceInfo &choice_2,
                            const ChoiceInfo &choice_3) {
-  return choice_1;
+  if (choice_1.available) {
+    return choice_1;
+  } else if (choice_2.available) {
+    return choice_2;
+  } else {
+    return choice_3;
+  } 
 }
 
 // randomly chooses a location based on the probabilities passed in with
