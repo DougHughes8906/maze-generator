@@ -57,7 +57,7 @@ void testRenderMaze() {
     { maze::wall_chtr, maze::path_chtr, maze::wall_chtr, maze::wall_chtr }
   };
 
-  const std::string test_fail_message{ "Test fail: renderMaze function "
+  const std::string test_fail_message{ "**TEST FAIL** renderMaze function "
     "fails to accurately render the maze." };
 
   testTrue(gridsEqual(renderMaze(test_grid), expected_grid),
@@ -227,7 +227,7 @@ void testValidMaze(std::mt19937 &random_engine) {
   constexpr int num_test_runs{ 100 };
   std::uniform_int_distribution<int> distribution(maze::MIN_SIDE_LEN,
                                                   maze::MAX_SIDE_LEN);
-  const std::string error_start{ "Test failed, invalid maze: \n" };
+  const std::string error_start{ "**TEST FAILED** invalid maze: \n" };
 
   for (int i{ 0 }; i < num_test_runs; ++i) {
     int num_sides{ distribution(random_engine) }; 
