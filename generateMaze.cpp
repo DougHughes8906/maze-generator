@@ -217,12 +217,12 @@ ChoiceInfo chooseNextLocation(const ChoiceInfo &forward_info,
     return availableChoice(forward_info, right_info, left_info);
   } 
   // check if all available
-  else if (foward_info.available && right_info.available && 
+  else if (forward_info.available && right_info.available && 
            left_info.available) {
     int probability_total{ forward_info.probability + right_info.probability +
                            left_info.probability };
 
-    int foward_barrier{ forward_info.probability };
+    int forward_barrier{ forward_info.probability };
     int right_barrier{ forward_barrier + right_info.probability };
 
     std::uniform_int_distribution<int> distribution(1, probability_total);
