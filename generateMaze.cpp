@@ -125,8 +125,14 @@ bool isPath(std::pair<int, int> location, const maze::bool_grid_t &maze) {
 
 // determines if path can be opened in a given location. It cannot be opened
 // if there will be two path spaces next to it
+// It also cannot be opened if the space is already opened
 // PRECONDITION: the location is a valid location in the maze
 bool canOpenPath(std::pair<int, int> location, const maze::bool_grid_t &maze) {
+  // ensure the space itself is not already opened
+  if (isPath(location, maze)) {
+    return false;
+  } 
+
   int num_path_adjacent{ 0 };
 
   // check up
@@ -209,7 +215,7 @@ ChoiceInfo chooseNextLocation(const ChoiceInfo &forward_info,
                               std::mt19937 &random_engine) {
   // check to see if no choices are available
   if (!(forward_info.available || right_info.available || 
-        left_info.available)) {
+        left_info.available)) { 
     return forward_info;
   }
   // check to see if only one choice is available 
