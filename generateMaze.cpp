@@ -400,7 +400,9 @@ void buildSolutionPath(maze::bool_grid_t &maze,
                                  random_engine);
 
     if (isDummy(next_choice)) {
-      finished = true; 
+      if (!path_stack.empty()) {
+        path_stack.pop();
+      } 
     } else {
       cur_loc = next_choice.location;
       cur_direction = next_choice.direction;
