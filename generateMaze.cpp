@@ -36,6 +36,14 @@ bool isDummy(const ChoiceInfo &choice) {
   return (choice.location.first == -1 && choice.location.second == -1);
 }
 
+// returns true if a given location in the maze is on a border
+bool isBorder(std::pair<int, int> location, const maze::bool_grid_t &maze) { 
+  int last_row_ind{ static_cast<int>(maze.size() - 1) };
+  int last_col_ind{ static_cast<int>(maze[location.first].size() - 1) };
+  return (location.first == 0 || location.first == last_row_ind ||
+          location.second == 0 || location.second == last_col_ind); 
+}
+
 // randomly chooses the start location for the maze along one of the borders
 // of the maze. The corners of the maze are excluded as possible starting
 // locations.
@@ -142,8 +150,8 @@ bool isPath(std::pair<int, int> location, const maze::bool_grid_t &maze) {
 // It also cannot be opened if the space is already opened
 // PRECONDITION: the location is a valid location in the maze
 bool canOpenPath(std::pair<int, int> location, const maze::bool_grid_t &maze) {
-  // ensure the space itself is not already opened
-  if (isPath(location, maze)) {
+  // ensure the space itself is not already opened and is not on a border
+  if (isPath(location, maze) || isBorder(location, maze)) {
     return false;
   } 
 
@@ -288,14 +296,6 @@ ChoiceInfo chooseNextLocation(const ChoiceInfo &forward_info,
       return other_choice;
     } 
   }
-}
-
-// returns true if a given location in the maze is on a border
-bool isBorder(std::pair<int, int> location, const maze::bool_grid_t &maze) { 
-  int last_row_ind{ static_cast<int>(maze.size() - 1) };
-  int last_col_ind{ static_cast<int>(maze[location.first].size() - 1) };
-  return (location.first == 0 || location.first == last_row_ind ||
-          location.second == 0 || location.second == last_col_ind); 
 } 
 
 // find a new direction based on a current direction and where you
@@ -338,7 +338,7 @@ maze::Direction findDirection(maze::Direction cur_direction,
 void buildSolutionPath(maze::bool_grid_t &maze, 
                        std::pair<int, int> start_loc,
                        std::mt19937 &random_engine) {
-  const int maze_side_len{ static_cast<int>(maze.size()) }; 
+  const int maze_side_len{ static_cast<int>(maze.size()) };  
 
   // open the starting location
   openLocation(start_loc, maze); 
@@ -370,7 +370,7 @@ void buildSolutionPath(maze::bool_grid_t &maze,
   // stack used to keep track of the path taken. Used during path
   // creation if a dead end is hit
   std::stack<ChoiceInfo> path_stack;
-  path_stack.push(cur_info);
+  path_stack.push(cur_info); 
 
   // flag used to determine when the solution path building is finished
   bool finished{ false };
@@ -386,9 +386,19 @@ void buildSolutionPath(maze::bool_grid_t &maze,
                                        maze::RelativeDirection::left) }; 
     auto left_loc{ getAdjacent(last_choice.location, left_direction) }; 
 
+    int num_avail{ 0 };
     bool forward_avail{ canOpenPath(forward_loc, maze) };
+    if (forward_avail) {
+      ++num_avail;
+    }
     bool right_avail{ canOpenPath(right_loc, maze) };
+    if (right_avail) {
+      ++num_avail;
+    }
     bool left_avail{ canOpenPath(left_loc, maze) }; 
+    if (left_avail) {
+      ++num_avail;
+    } 
 
     ChoiceInfo forward_info(forward_loc, forward_avail, forward_probability,
                             forward_direction);
@@ -399,17 +409,15 @@ void buildSolutionPath(maze::bool_grid_t &maze,
     auto next_choice = chooseNextLocation(forward_info, right_info, left_info,
                                  random_engine);
 
-    if (isDummy(next_choice)) {
-      if (!path_stack.empty()) {
-        path_stack.pop();
-      } 
-    } else {
-      cur_loc = next_choice.location;
-      cur_direction = next_choice.direction;
-   
-      openLocation(cur_loc, maze);
-      path_stack.push(next_choice);
-      finished = isBorder(cur_loc, maze);
+    // no need to consider this choice again if there were no options
+    // or only one option (in which case that one option is next_choice)
+    if (num_avail < 2) {
+      path_stack.pop();
+    }
+ 
+    if (!isDummy(next_choice)) {   
+      openLocation(next_choice.location, maze);
+      path_stack.push(next_choice); 
     } 
   }  
 } 
