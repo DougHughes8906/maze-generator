@@ -22,6 +22,12 @@ struct ChoiceInfo {
   }
 };
 
+// used to indicate that no choice could be made
+ChoiceInfo dummyChoice() {
+  return ChoiceInfo(std::make_pair(-1, -1), false, 0, 
+                    maze::Direction::forward);
+}
+
 // randomly chooses the start location for the maze along one of the borders
 // of the maze. The corners of the maze are excluded as possible starting
 // locations.
