@@ -333,11 +333,12 @@ maze::Direction findDirection(maze::Direction cur_direction,
   }
 }
 
-// builds a single path from one border location to another that can be
-// used to solve the maze
-void buildSolutionPath(maze::bool_grid_t &maze, 
-                       std::pair<int, int> start_loc,
-                       std::mt19937 &random_engine) {
+// builds all path area for the maze, effectively creating the 
+// maze from a start of a grid of wall (the path is carved out
+// of the starting all-wall grid)
+void buildAllPath(maze::bool_grid_t &maze, 
+                  std::pair<int, int> start_loc,
+                  std::mt19937 &random_engine) {
   const int maze_side_len{ static_cast<int>(maze.size()) };  
 
   // open the starting location
@@ -422,10 +423,6 @@ void buildSolutionPath(maze::bool_grid_t &maze,
   }  
 } 
 
-void buildBranches(maze::bool_grid_t &maze, std::pair<int, int> start_loc) {
-  return;
-}
-
 maze::bool_grid_t generateMaze(int side_len, std::mt19937 &random_engine) {
   assert(side_len > 0);
 
@@ -438,9 +435,7 @@ maze::bool_grid_t generateMaze(int side_len, std::mt19937 &random_engine) {
 
   auto start_loc{ chooseStartLocation(side_len, random_engine) };
 
-  buildSolutionPath(new_maze, start_loc, random_engine);
-
-  buildBranches(new_maze, start_loc);
+  buildAllPath(new_maze, start_loc, random_engine); 
 
   return new_maze;  
 }
