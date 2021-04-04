@@ -25,7 +25,7 @@ struct ChoiceInfo {
 // used to indicate that no choice could be made
 ChoiceInfo dummyChoice() {
   return ChoiceInfo(std::make_pair(-1, -1), false, 0, 
-                    maze::Direction::forward);
+                    maze::Direction::up);
 }
 
 // returns true if a ChoiceInfo object is considered a dummy choice
