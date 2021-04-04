@@ -3,6 +3,7 @@
 #include <cassert>
 #include <random>
 #include <iostream>
+#include <stack>
 #include "maze.h"
 #include "generateMaze.h"
 
@@ -356,6 +357,9 @@ void buildSolutionPath(maze::bool_grid_t &maze,
   openLocation(cur_loc, maze);  
   auto cur_direction{ start_direction };
 
+  // all of the info on this position
+  ChoiceInfo cur_info(cur_loc, true, 1, cur_direction);
+
   // probabilities of moving in each direction
   // the probability for any given direction is that value over the
   // sum of all three values
@@ -363,17 +367,24 @@ void buildSolutionPath(maze::bool_grid_t &maze,
   int right_probability{ 2 };
   int left_probability{ 2 };
 
+  // stack used to keep track of the path taken. Used during path
+  // creation if a dead end is hit
+  std::stack<ChoiceInfo> path_stack;
+  path_stack.push(cur_info);
+
   // flag used to determine when the solution path building is finished
   bool finished{ false };
-  while (!finished) {
-    auto forward_direction{ cur_direction };
-    auto forward_loc{ getAdjacent(cur_loc, forward_direction) };
-    auto right_direction{ findDirection(cur_direction, 
+  while (!finished && !path_stack.empty()) {
+    auto last_choice{ path_stack.top() };
+
+    auto forward_direction{ last_choice.direction };
+    auto forward_loc{ getAdjacent(last_choice.location, forward_direction) };
+    auto right_direction{ findDirection(last_choice.direction, 
                                         maze::RelativeDirection::right) }; 
-    auto right_loc{ getAdjacent(cur_loc, right_direction) };
-    auto left_direction{ findDirection(cur_direction,
+    auto right_loc{ getAdjacent(last_choice.location, right_direction) };
+    auto left_direction{ findDirection(last_choice.direction,
                                        maze::RelativeDirection::left) }; 
-    auto left_loc{ getAdjacent(cur_loc, left_direction) }; 
+    auto left_loc{ getAdjacent(last_choice.location, left_direction) }; 
 
     bool forward_avail{ canOpenPath(forward_loc, maze) };
     bool right_avail{ canOpenPath(right_loc, maze) };
@@ -395,6 +406,7 @@ void buildSolutionPath(maze::bool_grid_t &maze,
       cur_direction = next_choice.direction;
    
       openLocation(cur_loc, maze);
+      path_stack.push(next_choice);
       finished = isBorder(cur_loc, maze);
     } 
   }  
