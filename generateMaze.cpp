@@ -210,8 +210,7 @@ ChoiceInfo availableChoice(const ChoiceInfo &choice_1,
 // randomly chooses a location based on the probabilities passed in with
 // the ChoiceInfo structs. Only considers a choice if the location is 
 // available. 
-// There should not be a case where there are no choices available
-//  but if so, the forward_info is returned
+// If no choices are available, a dummy choiceInfo is returned.
 // If only one choice is available that location is returned.
 // If only one of right and left is available, the remaining choice gets
 //  the probability of both. 
@@ -222,7 +221,7 @@ ChoiceInfo chooseNextLocation(const ChoiceInfo &forward_info,
   // check to see if no choices are available
   if (!(forward_info.available || right_info.available || 
         left_info.available)) { 
-    return forward_info;
+    return dummyChoice();
   }
   // check to see if only one choice is available 
   else if (onlyOneAvailable(forward_info, right_info, left_info)) {
