@@ -28,6 +28,13 @@ ChoiceInfo dummyChoice() {
                     maze::Direction::forward);
 }
 
+// returns true if a ChoiceInfo object is considered a dummy choice
+// The distinguishing factor is that a choice has a location of (-1, -1).
+// This is sufficient because it would not be a valid location in a maze
+bool isDummy(const ChoiceInfo &choice) {
+  return (choice.location.first == -1 && choice.location.second == -1);
+}
+
 // randomly chooses the start location for the maze along one of the borders
 // of the maze. The corners of the maze are excluded as possible starting
 // locations.
@@ -381,11 +388,15 @@ void buildSolutionPath(maze::bool_grid_t &maze,
     auto next_choice = chooseNextLocation(forward_info, right_info, left_info,
                                  random_engine);
 
-    cur_loc = next_choice.location;
-    cur_direction = next_choice.direction;
- 
-    openLocation(cur_loc, maze);
-    finished = isBorder(cur_loc, maze);
+    if (isDummy(next_choice)) {
+      finished = true; 
+    } else {
+      cur_loc = next_choice.location;
+      cur_direction = next_choice.direction;
+   
+      openLocation(cur_loc, maze);
+      finished = isBorder(cur_loc, maze);
+    } 
   }  
 } 
 
