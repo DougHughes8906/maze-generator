@@ -50,7 +50,7 @@ void testRenderMaze() {
     { true, false, true, true }
   };
   
-  const maze::char_grid_t expected_grid{
+  const maze::string_grid_t expected_grid{
     { maze::wall_chtr, maze::wall_chtr, maze::path_chtr, maze::wall_chtr },
     { maze::wall_chtr, maze::wall_chtr, maze::path_chtr, maze::wall_chtr },
     { maze::wall_chtr, maze::path_chtr, maze::path_chtr, maze::wall_chtr },
