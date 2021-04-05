@@ -44,12 +44,10 @@ bool isBorder(std::pair<int, int> location, const maze::bool_grid_t &maze) {
           location.second == 0 || location.second == last_col_ind); 
 }
 
-// randomly chooses the start location for the maze along one of the borders
-// of the maze. The corners of the maze are excluded as possible starting
-// locations.
-std::pair<int, int> chooseStartLocation(int side_len, 
-                                        std::mt19937 &random_engine) {
-  std::pair<int, int> start_loc(0, 0); 
+// randomly chooses a non-corner, random border location
+std::pair<int, int> chooseRandomBorder(int side_len, 
+                                       std::mt19937 &random_engine) {
+  std::pair<int, int> random_loc(0, 0); 
 
   std::uniform_int_distribution<int> border_distribution(maze::MIN_BORDER_INT, 
                                                          maze::MAX_BORDER_INT);
@@ -68,18 +66,18 @@ std::pair<int, int> chooseStartLocation(int side_len,
 
   switch(chosen_border) {
     case maze::Border::top:
-      start_loc.second = chosen_index; 
+      random_loc.second = chosen_index; 
       break; 
     case maze::Border::bottom:
-      start_loc.first = side_len - 1;
-      start_loc.second = chosen_index;
+      random_loc.first = side_len - 1;
+      random_loc.second = chosen_index;
       break;
     case maze::Border::left:
-      start_loc.first = chosen_index;
+      random_loc.first = chosen_index;
       break;
     case maze::Border::right:
-      start_loc.first = chosen_index;
-      start_loc.second = side_len - 1;
+      random_loc.first = chosen_index;
+      random_loc.second = side_len - 1;
       break;
     default:
       std::cout << "Error in starting location selection: "
@@ -88,7 +86,15 @@ std::pair<int, int> chooseStartLocation(int side_len,
       break;
   };  
 
-  return start_loc;
+  return random_loc;
+}
+
+// randomly chooses the start location for the maze along one of the borders
+// of the maze. The corners of the maze are excluded as possible starting
+// locations.
+std::pair<int, int> chooseStartLocation(int side_len, 
+                                        std::mt19937 &random_engine) {
+  return chooseRandomBorder(side_len, random_engine);  
 }
 
 // sets a given location in the maze to false indicating that it is
@@ -427,7 +433,7 @@ maze::bool_grid_t generateMaze(int side_len, std::mt19937 &random_engine) {
   assert(side_len > 0);
 
   maze::bool_grid_t new_maze( side_len, std::vector<bool>(side_len, 
-                                                          maze::wall_chtr) );
+                                                          maze::wall_val) );
  
   if (side_len < maze::MIN_SIDE_LEN) {
     return new_maze;
