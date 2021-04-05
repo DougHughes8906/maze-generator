@@ -140,12 +140,13 @@ void openLocation(std::pair<int, int> location, maze::bool_grid_t &maze) {
 }
 
 // finds the starting direciton for a maze based on the starting location
-maze::Direction getStartDirection(std::pair<int, int> start_loc, int side_len) {
-  if (start_loc.first == 0) {
+maze::Direction getBorderDirection(std::pair<int, int> border_loc, 
+                                  int side_len) {
+  if (border_loc.first == 0) {
     return maze::Direction::down;
-  } else if (start_loc.first == side_len - 1) {
+  } else if (border_loc.first == side_len - 1) {
     return maze::Direction::up;
-  } else if (start_loc.second == 0) {
+  } else if (border_loc.second == 0) {
     return maze::Direction::right;
   } else { 
     return maze::Direction::left;
@@ -388,7 +389,7 @@ void buildAllPath(maze::bool_grid_t &maze,
   // find starting direction
   maze::Direction start_direction
   { 
-    getStartDirection(start_loc, maze_side_len) 
+    getBorderDirection(start_loc, maze_side_len) 
   };
 
   // determine the next path location based on the starting 
