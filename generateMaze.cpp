@@ -190,11 +190,14 @@ bool isPath(std::pair<int, int> location, const maze::bool_grid_t &maze) {
   return (maze[location.first][location.second] == maze::path_val); 
 }
 
-// determines if path can be opened in a given location. It cannot be opened
-// if there will be two path spaces next to it
-// It also cannot be opened if the space is already opened
+// determines if path can be opened in a given location. 
+// It cannot be opened if any of the following hold:
+//    - there will be two path spaces next to it 
+//    - the space is already opened
+//    - the opening would take away a corner for another path
 // PRECONDITION: the location is a valid location in the maze
-bool canOpenPath(std::pair<int, int> location, const maze::bool_grid_t &maze) {
+bool canOpenPath(std::pair<int, int> location, const maze::bool_grid_t &maze,
+                 maze::Direction direction) {
   // ensure the space itself is not already opened and is not on a border
   if (isPath(location, maze) || isBorder(location, maze)) {
     return false;
@@ -233,7 +236,75 @@ bool canOpenPath(std::pair<int, int> location, const maze::bool_grid_t &maze) {
     }
   }
   
-  return (num_path_adjacent < 2); 
+  if (num_path_adjacent >= 2) {
+    return false;
+  } 
+
+  // check to see if opening this space would take away a corner
+  // to another path (by checking if there is whitespace diagonally in
+  // the given direction)
+  switch(direction) {
+    case maze::Direction::up: 
+    {
+      auto diag_left{ std::make_pair(location.first - 1, location.second - 1) };
+      if (isPath(diag_left, maze)) {
+        return false;
+      }
+      auto diag_right{ 
+        std::make_pair(location.first - 1, location.second + 1)
+      };
+      if (isPath(diag_right, maze)) {
+        return false;
+      }
+      break;
+    }
+    case maze::Direction::down:
+    {
+      auto diag_left{ std::make_pair(location.first + 1, location.second - 1) };
+      if (isPath(diag_left, maze)) {
+        return false;
+      }
+      auto diag_right{ 
+        std::make_pair(location.first + 1, location.second + 1)
+      };
+      if (isPath(diag_right, maze)) {
+        return false;
+      }
+      break;
+    }
+    case maze::Direction::left:
+    {
+      auto diag_up{ std::make_pair(location.first - 1, location.second - 1) };
+      if (isPath(diag_up, maze)) {
+        return false;
+      }
+      auto diag_down{ 
+        std::make_pair(location.first + 1, location.second - 1) 
+      };
+      if (isPath(diag_down, maze)) {
+        return false;
+      }
+      break;
+    }
+    case maze::Direction::right:
+    {
+      auto diag_up{ std::make_pair(location.first - 1, location.second + 1) };
+      if (isPath(diag_up, maze)) {
+        return false;
+      }
+      auto diag_down{ 
+        std::make_pair(location.first + 1, location.second + 1) 
+      };
+      if (isPath(diag_down, maze)) {
+        return false;
+      } 
+      break;
+    }
+    default:
+      break;
+  }   
+
+  return true;
 }
 
 // returns true if one and only one of the choices are available
@@ -459,15 +530,15 @@ void buildAllPath(maze::bool_grid_t &maze,
     auto left_loc{ getAdjacent(last_choice.location, left_direction) }; 
 
     int num_avail{ 0 };
-    bool forward_avail{ canOpenPath(forward_loc, maze) };
+    bool forward_avail{ canOpenPath(forward_loc, maze, forward_direction) };
     if (forward_avail) {
       ++num_avail;
     }
-    bool right_avail{ canOpenPath(right_loc, maze) };
+    bool right_avail{ canOpenPath(right_loc, maze, right_direction) };
     if (right_avail) {
       ++num_avail;
     }
-    bool left_avail{ canOpenPath(left_loc, maze) }; 
+    bool left_avail{ canOpenPath(left_loc, maze, left_direction) }; 
     if (left_avail) {
       ++num_avail;
     } 
