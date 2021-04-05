@@ -15,7 +15,7 @@ namespace maze
   constexpr bool wall_val{ true };
   constexpr bool path_val{ false };
   constexpr int MIN_SIDE_LEN{ 3 };
-  constexpr int MAX_SIDE_LEN{ 40 };
+  constexpr int MAX_SIDE_LEN{ 26 };
   static constexpr int MIN_BORDER_INT{ 0 };
   static constexpr int MAX_BORDER_INT{ 3 };
 

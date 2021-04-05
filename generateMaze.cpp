@@ -378,6 +378,32 @@ maze::Direction findDirection(maze::Direction cur_direction,
   }
 }
 
+// ensures a given location is within the boundaries of the given
+// maze
+bool inMaze(std::pair<int, int> location, const maze::bool_grid_t &maze) {
+  int last_row{ static_cast<int>(maze.size() - 1) };
+  int last_col{ static_cast<int>(maze[location.first].size() - 1) };
+
+  return (location.first >= 0 && location.first <= last_row &&
+          location.second >= 0 && location.second <= last_col);
+}
+
+// builds the ending for the maze
+void buildEnding(maze::bool_grid_t &maze,
+                 std::pair<int, int> start_loc,
+                 std::mt19937 &random_engine) {
+  int side_len{ static_cast<int>(maze.size()) };
+  auto end_location{ chooseEndLocation(side_len, start_loc, random_engine) };
+  auto end_direction{ getBorderDirection(end_location, side_len) };
+
+  openLocation(end_location, maze);
+  // if there is wall in front of the end location, clear it out
+  auto next_loc{ getAdjacent(end_location, end_direction) };
+  while (inMaze(next_loc, maze) && !isPath(next_loc, maze)) {
+    openLocation(next_loc, maze);
+    next_loc = getAdjacent(next_loc, end_direction); 
+  }
+}
 // builds all path area for the maze, effectively creating the 
 // maze from a start of a grid of wall (the path is carved out
 // of the starting all-wall grid)
@@ -465,7 +491,9 @@ void buildAllPath(maze::bool_grid_t &maze,
       openLocation(next_choice.location, maze);
       path_stack.push(next_choice); 
     } 
-  }  
+  }
+
+  buildEnding(maze, start_loc, random_engine);  
 } 
 
 maze::bool_grid_t generateMaze(int side_len, std::mt19937 &random_engine) {
