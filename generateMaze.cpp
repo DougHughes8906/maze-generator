@@ -89,6 +89,41 @@ std::pair<int, int> chooseRandomBorder(int side_len,
   return random_loc;
 }
 
+// returns true if two given locations are adjacent
+// considered adjacent if they are the same location or they
+// are 4-directionally adjacent
+bool isAdjacent(std::pair<int, int> loc_one, std::pair<int, int> loc_two) { 
+  if (loc_one.first == loc_two.first) {
+    // same spot, or right, or left
+    if (loc_one.second == loc_two.second || 
+        loc_one.second == loc_two.second - 1 ||
+        loc_one.second == loc_two.second + 1) {
+      return true;
+    } else {
+      return false;
+    }
+  } else if (loc_one.second == loc_two.second) {
+    // above or below
+    return (loc_one.first == loc_two.first + 1 ||
+            loc_one.first == loc_two.first - 1);
+  }
+  return false;
+}
+
+// randomly chooses the end location for the maze along one of the borders
+// of the maze. It excludes any border locations adjacent to the start of
+// the maze and the corners of the maze
+std::pair<int, int> chooseEndLocation(int side_len,
+                                      std::pair<int, int> start_loc, 
+                                      std::mt19937 &random_engine) {
+  auto end_loc{ chooseRandomBorder(side_len, random_engine) };
+  while (isAdjacent(end_loc, start_loc)) {
+    end_loc = chooseRandomBorder(side_len, random_engine);
+  }
+
+  return end_loc; 
+}
+
 // randomly chooses the start location for the maze along one of the borders
 // of the maze. The corners of the maze are excluded as possible starting
 // locations.
