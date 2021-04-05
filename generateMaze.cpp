@@ -139,7 +139,10 @@ void openLocation(std::pair<int, int> location, maze::bool_grid_t &maze) {
   maze[location.first][location.second] = maze::path_val;
 }
 
-// finds the starting direciton for a maze based on the starting location
+// finds a direction based on a border location. It is the 
+// direction implied by imagining someone was entering the maze
+// at that location
+// PRECONDITION: the border_loc is actually on a border
 maze::Direction getBorderDirection(std::pair<int, int> border_loc, 
                                   int side_len) {
   if (border_loc.first == 0) {
