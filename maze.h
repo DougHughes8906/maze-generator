@@ -51,14 +51,14 @@ namespace maze
     small,
     medium,
     large
-  }
+  };
 
   enum class MazeDifficulty
   {
     easy,
     medium,
     hard
-  }
+  };
 }
 
 #endif
