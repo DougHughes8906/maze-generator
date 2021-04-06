@@ -45,6 +45,20 @@ namespace maze
     right,
     left
   };
+
+  enum class MazeSize
+  {
+    small,
+    medium,
+    large
+  }
+
+  enum class MazeDifficulty
+  {
+    easy,
+    medium,
+    hard
+  }
 }
 
 #endif
