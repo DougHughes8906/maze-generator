@@ -9,6 +9,7 @@ namespace maze
   using char_grid_t = std::vector<std::vector<char>>;
   using bool_grid_t = std::vector<std::vector<bool>>;
   using string_grid_t = std::vector<std::vector<std::string>>; 
+  using maze_info_t = std::pair<bool_grid_t, int>;
 
   const std::string wall_chtr{ "XXX" };
   const std::string path_chtr{ "   " };
