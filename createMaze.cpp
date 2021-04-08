@@ -1,5 +1,6 @@
 #include <iostream>
 #include <random>
+#include <algorithm>
 #include "maze.h"
 #include "renderMaze.h"
 #include "generateMaze.h"
@@ -74,6 +75,15 @@ int getSideLen(maze::MazeSize size) {
   return side_len;
 }
 
+// Sorts a pool of mazes by the length of their shortest solution
+// paths
+void sortBySolutionLength(std::vector<maze::maze_info_t> &maze_pool) {
+  std::sort(maze_pool.begin(), maze_pool.end(), 
+            [] (const maze::maze_info_t &a, const maze::maze_info_t &b) {
+    return a.second < b.second;
+  });  
+}
+
 // builds a pool of mazes of the given size, sorts them by 
 // the length of the fastest solution to each of the mazes
 // in ascending order
@@ -89,6 +99,8 @@ void buildMazePool(std::vector<maze::maze_info_t> &maze_pool,
                                        0));
     maze_pool[i].second = findSolutionLength(maze_pool[i].first);
   }
+
+  sortBySolutionLength(maze_pool);
 }
 
 // takes a pool of mazes and chooses/returns one maze based on the 
