@@ -3,6 +3,7 @@
 #include "maze.h"
 #include "renderMaze.h"
 #include "generateMaze.h"
+#include "findSolutionLength.h"
 
 // prompt the console user for the desired size for the maze
 maze::MazeSize getMazeSize() {
@@ -86,6 +87,7 @@ void buildMazePool(std::vector<maze::maze_info_t> &maze_pool,
   for (int i{ 0 }; i < num_mazes; ++i) {
     maze_pool.push_back(std::make_pair(generateMaze(side_len, random_engine),
                                        0));
+    maze_pool[i].second = findSolutionLength(maze_pool[i].first);
   }
 }
 
