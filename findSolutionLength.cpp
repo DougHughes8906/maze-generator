@@ -1,6 +1,6 @@
 #include <queue>
 #include <vector>
-#include <utlity>
+#include <utility>
 #include "findSolutionLength.h"
 #include "findStart.h"
 #include "maze.h"
