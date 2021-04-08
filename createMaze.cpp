@@ -109,14 +109,35 @@ void buildMazePool(std::vector<maze::maze_info_t> &maze_pool,
 // difficulty of the mazes
 maze::bool_grid_t chooseMaze(const std::vector<maze::maze_info_t> &maze_pool,
                              maze::MazeDifficulty difficulty) {
-  return maze_pool[0].first;
+  int index{ 0 };
+  int num_mazes{ static_cast<int>(maze_pool.size()) };
+
+  switch(difficulty) {
+    case maze::MazeDifficulty::easy:
+      index = static_cast<int>(maze::EASY_PERCENTILE * num_mazes);
+      break;
+    case maze::MazeDifficulty::medium:
+      index = static_cast<int>(maze::MEDIUM_PERCENTILE * num_mazes);
+      break;
+    case maze::MazeDifficulty::hard:
+      index = static_cast<int>(maze::HARD_PERCENTILE * num_mazes);
+      break;
+    default:
+      break;
+  }
+
+  if (index >= num_mazes) {
+    index = num_mazes - 1;
+  }
+
+  return maze_pool[index].first;
 }
  
 // creates a maze of the given size and difficulty
 maze::bool_grid_t createMaze(maze::MazeSize size, 
                              maze::MazeDifficulty difficulty,
                              std::mt19937 &random_engine) {  
-  int num_mazes{ 1000 };
+  int num_mazes{ 5000 };
 
   std::vector<maze::maze_info_t> maze_pool;
 
