@@ -5,7 +5,6 @@
 #include "maze.h"
 #include "renderMaze.h"
 #include "generateMaze.h"
-#include "findStart.h"
 #include "findSolutionLength.h"
 
 /*
