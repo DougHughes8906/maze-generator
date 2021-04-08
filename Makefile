@@ -21,7 +21,7 @@ generateMaze.o : generateMaze.cpp maze.h generateMaze.h
 tests.o : tests.cpp renderMaze.h maze.h generateMaze.h findSolutionLength.h
 	$(CXX) $(CXXFLAGS) -c tests.cpp
 
-createMaze.o : createMaze.cpp renderMaze.h generateMaze.h
+createMaze.o : createMaze.cpp renderMaze.h generateMaze.h findSolutionLength.h
 	$(CXX) $(CXXFLAGS) -c createMaze.cpp
 
 findSolutionLength.o : findSolutionLength.cpp maze.h findStart.h \
