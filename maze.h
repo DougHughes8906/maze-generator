@@ -22,6 +22,9 @@ namespace maze
   constexpr int LARGE_SIDE_LEN{ 26 };
   static constexpr int MIN_BORDER_INT{ 0 };
   static constexpr int MAX_BORDER_INT{ 3 };
+  constexpr double EASY_PERCENTILE{ 0.40 };
+  constexpr double MEDIUM_PERCENTILE{ 0.75 };
+  constexpr double HARD_PERCENTILE{ 1. };
 
   enum class Border
   {
