@@ -1,3 +1,5 @@
+#include <utility>
+#include "maze.h"
 #include "findStart.h"
 
 // checks to see if there are two (and only two) path areas
